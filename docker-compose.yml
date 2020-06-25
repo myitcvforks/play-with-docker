@@ -1,7 +1,8 @@
 version: '3.2'
 services:
     haproxy:
-        container_name: haproxy
+        networks:
+          - pwd
         image: haproxy
         ports:
             - "80:8080"
@@ -9,8 +10,8 @@ services:
             - ./haproxy:/usr/local/etc/haproxy
 
     pwd:
-        # pwd daemon container always needs to be named this way
-        container_name: pwd
+        networks:
+          - pwd
         # use the latest golang image
         image: golang
         # go to the right place and starts the app
@@ -22,7 +23,8 @@ services:
             - $PWD:/go/src
             - sessions:/pwd
     l2:
-        container_name: l2
+        networks:
+          - pwd
         # use the latest golang image
         image: golang
         # go to the right place and starts the app
@@ -38,3 +40,7 @@ services:
 volumes:
     sessions:
     networks:
+
+networks:
+  pwd:
+    external: false
